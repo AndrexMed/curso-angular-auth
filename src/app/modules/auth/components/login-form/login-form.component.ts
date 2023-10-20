@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { faPen, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { AuthService } from '@services/auth.service';
 
 @Component({
   selector: 'app-login-form',
@@ -21,7 +22,8 @@ export class LoginFormComponent {
 
   constructor(
     private formBuilder: FormBuilder,
-    private router: Router
+    private router: Router,
+    private authSvc: AuthService
   ) { }
 
   doLogin() {
@@ -29,6 +31,16 @@ export class LoginFormComponent {
       this.status = 'loading';
       const { email, password } = this.form.getRawValue();
       // TODO
+      this.authSvc
+      .login(email,password)
+      .subscribe({
+        next: () => {
+          this.status = 'success'
+          this.router.navigate(["/app"])
+        }, error: () => {
+          this.status = 'failed'
+        }
+      })
     } else {
       this.form.markAllAsTouched();
     }
