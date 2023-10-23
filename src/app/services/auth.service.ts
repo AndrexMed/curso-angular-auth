@@ -7,11 +7,11 @@ import { environment } from '@environments/environment';
 })
 export class AuthService {
 
-  apiUrl = `${environment.apiBaseURL}/api/v1/auth/login`
+  apiUrl = `${environment.apiBaseURL}`
 
   constructor(private http: HttpClient) { }
 
   login(email: string, password: string) {
-    return this.http.post(this.apiUrl, {email, password})
+    return this.http.post(`${this.apiUrl}/api/v1/auth/login`, {email, password})
   }
 }
