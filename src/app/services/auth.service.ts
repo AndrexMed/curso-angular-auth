@@ -1,7 +1,9 @@
 import { HttpClient, HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '@environments/environment';
-import { catchError, switchMap, throwError } from 'rxjs';
+import { catchError, switchMap, tap, throwError } from 'rxjs';
+import { TokenService } from './token.service';
+import { ResponseLogin } from '@models/auth.model';
 
 @Injectable({
   providedIn: 'root'
@@ -10,10 +12,16 @@ export class AuthService {
 
   apiUrl = `${environment.apiBaseURL}`
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+    private tokenSvc: TokenService) { }
 
   login(email: string, password: string) {
-    return this.http.post(`${this.apiUrl}/api/v1/auth/login`, { email, password })
+    return this.http.post<ResponseLogin>(`${this.apiUrl}/api/v1/auth/login`, { email, password })
+      .pipe(
+        tap(response => {
+          this.tokenSvc.saveToken(response.access_token)
+        })
+      )
   }
 
   register(name: string, email: string, password: string) {
