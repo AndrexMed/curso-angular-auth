@@ -49,11 +49,11 @@ export class RegisterFormComponent {
       console.log(name, email, password);
 
       this.authSvc
-        .register(name, email, password)
+        .registerAndLogin(name, email, password)
         .subscribe({
           next: () => {
             this.status = 'success';
-            this.router.navigate(["/login"])
+            this.router.navigate(["/app/boards"])
           },
           error: (error) => {
             this.status = 'failed';
