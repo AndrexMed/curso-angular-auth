@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { faPen, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { RequestStatus } from '@models/request.status.model';
 import { AuthService } from '@services/auth.service';
@@ -13,7 +13,7 @@ export class LoginFormComponent {
 
   form = this.formBuilder.nonNullable.group({
     email: ['', [Validators.email, Validators.required]],
-    password: ['', [ Validators.required, Validators.minLength(6)]],
+    password: ['', [Validators.required, Validators.minLength(6)]],
   });
 
   faPen = faPen;
@@ -25,24 +25,35 @@ export class LoginFormComponent {
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private authSvc: AuthService
-  ) { }
+    private authSvc: AuthService,
+    private route: ActivatedRoute
+  ) {
+    this.route.queryParamMap.subscribe(
+      params => {
+        const email = params.get('email');
+
+        if (email) {
+          this.form.controls.email.setValue(email)
+        }
+      }
+    )
+  }
 
   doLogin() {
     if (this.form.valid) {
       this.status = 'loading';
       const { email, password } = this.form.getRawValue();
-      
+
       this.authSvc
-      .login(email,password)
-      .subscribe({
-        next: () => {
-          this.status = 'success'
-          this.router.navigate(["/app"])
-        }, error: () => {
-          this.status = 'failed'
-        }
-      })
+        .login(email, password)
+        .subscribe({
+          next: () => {
+            this.status = 'success'
+            this.router.navigate(["/app"])
+          }, error: () => {
+            this.status = 'failed'
+          }
+        })
     } else {
       this.form.markAllAsTouched();
     }
