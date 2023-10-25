@@ -30,7 +30,7 @@ export class AuthService {
   }
 
   logout() {
-    return this.tokenSvc.removeToken()
+    return this.tokenSvc.removeToken() , this.tokenSvc.removeRefreshToken()
   }
 
   register(name: string, email: string, password: string) {
