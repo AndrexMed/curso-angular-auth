@@ -8,12 +8,13 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { User } from '@models/users.model';
 import { AuthService } from '@services/auth.service';
+import { TokenService } from '@services/token.service';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
 })
-export class NavbarComponent implements OnInit{
+export class NavbarComponent implements OnInit {
 
   //user:  User | null = null
   user$ = this.authSvc.user$
@@ -27,7 +28,8 @@ export class NavbarComponent implements OnInit{
   isOpenOverlayBoards = false;
 
   constructor(private authSvc: AuthService,
-    private router: Router) { }
+    private router: Router,
+    private tokenSvc: TokenService) { }
 
   ngOnInit(): void {
     // this.authSvc.profile()
@@ -44,5 +46,9 @@ export class NavbarComponent implements OnInit{
   logout() {
     this.authSvc.logout()
     this.router.navigate(['/login'])
+  }
+
+  isValidToken() {
+    console.log(this.tokenSvc.isValidToken())
   }
 }
