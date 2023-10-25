@@ -4,6 +4,7 @@ import { environment } from '@environments/environment';
 import { catchError, switchMap, tap, throwError } from 'rxjs';
 import { TokenService } from './token.service';
 import { ResponseLogin } from '@models/auth.model';
+import { User } from '@models/users.model';
 
 @Injectable({
   providedIn: 'root'
@@ -60,5 +61,12 @@ export class AuthService {
 
   changePassword(token: string, newPassword: string) {
     return this.http.post(`${this.apiUrl}/api/v1/auth/change-password`, { token, newPassword })
+  }
+
+  profile() {
+    const token = this.tokenSvc.getToken()
+    return this.http.get<User>(`${this.apiUrl}/api/v1/auth/profile`, { headers: {
+      Authorization: `Bearer ${token}`
+    }})
   }
 }
