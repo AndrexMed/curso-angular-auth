@@ -21,6 +21,16 @@ export class UsersTableComponent implements OnInit {
     private authSvc: AuthService) { }
 
   ngOnInit(): void {
+    this.getUsers()
+    // this.authSvc.user$
+    //   .subscribe(
+    //     user => {
+    //       this.user = user
+    //     }
+    //   )
+  }
+
+  getUsers() {
     this.usersSvc.getUsers()
       .subscribe({
         next: (users) => {
@@ -30,12 +40,6 @@ export class UsersTableComponent implements OnInit {
           console.log(error)
         }
       })
-    // this.authSvc.user$
-    //   .subscribe(
-    //     user => {
-    //       this.user = user
-    //     }
-    //   )
   }
 
 }

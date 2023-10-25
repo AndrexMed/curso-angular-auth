@@ -12,7 +12,7 @@ export class AuthGuard implements CanActivate {
     private route: Router) { }
 
   canActivate(): boolean {
-    const isValidToken = this.tokenSvc.isValidToken()
+    const isValidToken = this.tokenSvc.isValidRefreshToken()
     console.log("Is Valid Token from AuthGuard: ", isValidToken)
 
     if (!isValidToken) {
