@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { TokenService } from './token.service';
 import { environment } from '@environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { User } from '@models/users.model';
+import { checkToken } from '@interceptors/token.interceptor';
 
 @Injectable({
   providedIn: 'root'
@@ -11,14 +11,9 @@ export class UsersService {
 
   apiUrl = `${environment.apiBaseURL}`
 
-  constructor(private tokenSvc: TokenService,
-    private http: HttpClient
-  ) { }
+  constructor(private http: HttpClient) { }
 
   getUsers() {
-    const token = this.tokenSvc.getToken()
-    return this.http.get<User[]>(`${this.apiUrl}/api/v1/users`, { headers: {
-      Authorization: `Bearer ${token}`
-    }})
+    return this.http.get<User[]>(`${this.apiUrl}/api/v1/users`, { context: checkToken() })
   }
 }
