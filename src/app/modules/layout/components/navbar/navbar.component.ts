@@ -15,7 +15,8 @@ import { AuthService } from '@services/auth.service';
 })
 export class NavbarComponent implements OnInit{
 
-  user:  User | null = null
+  //user:  User | null = null
+  user$ = this.authSvc.user$
 
   faBell = faBell;
   faInfoCircle = faInfoCircle;
@@ -29,15 +30,15 @@ export class NavbarComponent implements OnInit{
     private router: Router) { }
 
   ngOnInit(): void {
-    this.authSvc.profile()
-    .subscribe({
-      next: (user) => {
-        this.user = user
-      },
-      error: (error) => {
-        console.log(error)
-      }
-    })
+    // this.authSvc.profile()
+    // .subscribe({
+    //   next: (user) => {
+    //     this.user = user
+    //   },
+    //   error: (error) => {
+    //     console.log(error)
+    //   }
+    // })
   }
 
   logout() {

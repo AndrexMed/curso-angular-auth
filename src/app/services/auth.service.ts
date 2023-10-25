@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '@environments/environment';
-import { catchError, switchMap, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, switchMap, tap, throwError } from 'rxjs';
 import { TokenService } from './token.service';
 import { ResponseLogin } from '@models/auth.model';
 import { User } from '@models/users.model';
@@ -10,6 +10,8 @@ import { User } from '@models/users.model';
   providedIn: 'root'
 })
 export class AuthService {
+
+  user$ = new BehaviorSubject<User | null>(null)
 
   apiUrl = `${environment.apiBaseURL}`
 
@@ -65,8 +67,18 @@ export class AuthService {
 
   profile() {
     const token = this.tokenSvc.getToken()
-    return this.http.get<User>(`${this.apiUrl}/api/v1/auth/profile`, { headers: {
-      Authorization: `Bearer ${token}`
-    }})
+    return this.http.get<User>(`${this.apiUrl}/api/v1/auth/profile`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).pipe(
+      tap(user => {
+        this.user$.next(user)
+      })
+    )
+  }
+
+  getDataUser() {
+    this.user$.getValue()
   }
 }
