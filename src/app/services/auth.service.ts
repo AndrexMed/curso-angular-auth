@@ -30,7 +30,7 @@ export class AuthService {
   }
 
   logout() {
-    return this.tokenSvc.removeToken() , this.tokenSvc.removeRefreshToken()
+    return this.tokenSvc.removeToken(), this.tokenSvc.removeRefreshToken()
   }
 
   register(name: string, email: string, password: string) {
@@ -79,5 +79,15 @@ export class AuthService {
 
   getDataUser() {
     this.user$.getValue()
+  }
+
+  refreshToken(refreshToken: string) {
+    return this.http.post<ResponseLogin>(`${this.apiUrl}/api/v1/auth/refresh-token`, { refreshToken })
+    .pipe(
+      tap(response => {
+        this.tokenSvc.saveToken(response.access_token)
+        this.tokenSvc.saveRefreshToken(response.refresh_token)
+      })
+    )
   }
 }
