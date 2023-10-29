@@ -4,12 +4,13 @@ import { environment } from '@environments/environment';
 import { checkToken } from '@interceptors/token.interceptor';
 import { Board } from '@models/board.model';
 import { Card } from '@models/card.model';
-import { retry } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BoardsService {
+
+  bufferSpace = 65535;
 
   apiUrl = environment.apiBaseURL
 
@@ -25,17 +26,26 @@ export class BoardsService {
     console.log(cards, currentIndex)
 
     if(cards.length === 1){
-      return "is new"
+      this.bufferSpace
+      //return "is new"
+      return this.bufferSpace
     }
     if(cards.length > 1 && currentIndex === 0){
-      return "is the top"
+      const onTopPosition = cards[1].position;
+      return onTopPosition / 2
+      //return "is the top"
     }
     const lastIndex = cards.length - 1
     if(cards.length > 2 && currentIndex > 0 && currentIndex < lastIndex){
-      return "in the midle"
+      const prevPosition = cards[currentIndex - 1].position;
+      const nextPosition = cards[currentIndex + 1].position;
+      return (prevPosition + nextPosition) / 2
+      //return "in the midle"
     }
     if(cards.length > 1 && currentIndex === lastIndex){
-      return "in the bottom"
+      const onBottomPosition = cards[lastIndex - 1].position;
+      return onBottomPosition + this.bufferSpace;
+      //return "in the bottom"
     }
     return 0;
   }
