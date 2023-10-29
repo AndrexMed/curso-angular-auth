@@ -85,13 +85,13 @@ export class BoardComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<Card[]>) {
-    if (event.previousContainer === event.container) {
+    if (event.previousContainer === event.container) { //SI el elemento arrastrado esta entre la misma lista
       moveItemInArray(
         event.container.data,
         event.previousIndex,
         event.currentIndex
       );
-    } else {
+    } else {//sino...
       transferArrayItem(
         event.previousContainer.data,
         event.container.data,
@@ -99,6 +99,10 @@ export class BoardComponent implements OnInit {
         event.currentIndex
       );
     }
+
+    //Despues...
+    const rta = this.boardSvc.getPosition(event.container.data,  event.currentIndex)
+    console.log(rta)
   }
 
   addColumn() {
