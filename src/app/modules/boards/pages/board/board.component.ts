@@ -107,7 +107,9 @@ export class BoardComponent implements OnInit {
     console.log(position)
 
     const card = event.container.data[event.currentIndex]
-    this.updateCard(card, position)
+    const listId = event.container.id;
+    console.log("listId: ", listId)
+    this.updateCard(card, position, listId)
   }
 
   addColumn() {
@@ -137,8 +139,8 @@ export class BoardComponent implements OnInit {
       })
   }
 
-  private updateCard(card: Card, position: number) {
-    this.cardSvc.update(card.id, { position })
+  private updateCard(card: Card, position: number, listId: number | string) {
+    this.cardSvc.update(card.id, { position, listId })
       .subscribe((cardUpdated) => {
         console.log(cardUpdated)
       })
