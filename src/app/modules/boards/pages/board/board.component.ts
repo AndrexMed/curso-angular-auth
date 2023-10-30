@@ -12,6 +12,7 @@ import { ActivatedRoute } from '@angular/router';
 import { BoardsService } from '@services/boards.service';
 import { Board } from '@models/board.model';
 import { Card } from '@models/card.model';
+import { CardsService } from '@services/cards.service';
 
 @Component({
   selector: 'app-board',
@@ -71,7 +72,8 @@ export class BoardComponent implements OnInit {
 
   constructor(private dialog: Dialog,
     private route: ActivatedRoute,
-    private boardSvc: BoardsService) { }
+    private boardSvc: BoardsService,
+    private cardSvc: CardsService) { }
 
   ngOnInit(): void {
     this.route.paramMap
@@ -101,8 +103,11 @@ export class BoardComponent implements OnInit {
     }
 
     //Despues...
-    const rta = this.boardSvc.getPosition(event.container.data,  event.currentIndex)
-    console.log(rta)
+    const position = this.boardSvc.getPosition(event.container.data, event.currentIndex)
+    console.log(position)
+
+    const card = event.container.data[event.currentIndex]
+    this.updateCard(card, position)
   }
 
   addColumn() {
@@ -129,6 +134,13 @@ export class BoardComponent implements OnInit {
     this.boardSvc.getBoard(id)
       .subscribe(board => {
         this.board = board
+      })
+  }
+
+  private updateCard(card: Card, position: number) {
+    this.cardSvc.update(card.id, { position })
+      .subscribe((cardUpdated) => {
+        console.log(cardUpdated)
       })
   }
 }

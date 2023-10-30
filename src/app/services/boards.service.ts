@@ -44,7 +44,7 @@ export class BoardsService {
     }
     if(cards.length > 1 && currentIndex === lastIndex){
       const onBottomPosition = cards[lastIndex - 1].position;
-      return onBottomPosition + this.bufferSpace;
+      return onBottomPosition + this.bufferSpace
       //return "in the bottom"
     }
     return 0;
