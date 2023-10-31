@@ -4,6 +4,7 @@ import { environment } from '@environments/environment';
 import { checkToken } from '@interceptors/token.interceptor';
 import { Board } from '@models/board.model';
 import { Card } from '@models/card.model';
+import { Colors } from '@models/color.model';
 
 @Injectable({
   providedIn: 'root'
@@ -22,31 +23,37 @@ export class BoardsService {
     })
   }
 
-  getPosition(cards: Card[], currentIndex: number){
+  getPosition(cards: Card[], currentIndex: number) {
     console.log(cards, currentIndex)
 
-    if(cards.length === 1){
+    if (cards.length === 1) {
       this.bufferSpace
       //return "is new"
       return this.bufferSpace
     }
-    if(cards.length > 1 && currentIndex === 0){
+    if (cards.length > 1 && currentIndex === 0) {
       const onTopPosition = cards[1].position;
       return onTopPosition / 2
       //return "is the top"
     }
     const lastIndex = cards.length - 1
-    if(cards.length > 2 && currentIndex > 0 && currentIndex < lastIndex){
+    if (cards.length > 2 && currentIndex > 0 && currentIndex < lastIndex) {
       const prevPosition = cards[currentIndex - 1].position;
       const nextPosition = cards[currentIndex + 1].position;
       return (prevPosition + nextPosition) / 2
       //return "in the midle"
     }
-    if(cards.length > 1 && currentIndex === lastIndex){
+    if (cards.length > 1 && currentIndex === lastIndex) {
       const onBottomPosition = cards[lastIndex - 1].position;
       return onBottomPosition + this.bufferSpace
       //return "in the bottom"
     }
     return 0;
+  }
+
+  createBoard(title: string, backgroundColor: Colors) {
+    return this.http.post<Board>(`${this.apiUrl}/api/v1/boards`, { title, backgroundColor }, {
+      context: checkToken()
+    })
   }
 }
