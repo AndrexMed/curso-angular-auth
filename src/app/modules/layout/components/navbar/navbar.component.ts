@@ -6,7 +6,6 @@ import {
   faClose,
   faAngleDown
 } from '@fortawesome/free-solid-svg-icons';
-import { User } from '@models/users.model';
 import { AuthService } from '@services/auth.service';
 import { TokenService } from '@services/token.service';
 
@@ -26,6 +25,7 @@ export class NavbarComponent implements OnInit {
 
   isOpenOverlayAvatar = false;
   isOpenOverlayBoards = false;
+  isOpenOverlayCreateBoard = false;
 
   constructor(private authSvc: AuthService,
     private router: Router,
