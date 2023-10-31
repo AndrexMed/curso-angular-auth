@@ -51,4 +51,8 @@ export class NavbarComponent implements OnInit {
   isValidToken() {
     console.log(this.tokenSvc.isValidToken())
   }
+
+  close(event: boolean) {
+    this.isOpenOverlayCreateBoard = event
+  }
 }
