@@ -6,14 +6,16 @@ import {
 } from '@angular/cdk/drag-drop';
 import { Dialog } from '@angular/cdk/dialog';
 import { TodoDialogComponent } from '@boards/components/todo-dialog/todo-dialog.component';
+import { faClose } from '@fortawesome/free-solid-svg-icons';
 
-import { ToDo, Column } from '@models/todo.model';
+import { ToDo } from '@models/todo.model';
 import { ActivatedRoute } from '@angular/router';
 import { BoardsService } from '@services/boards.service';
 import { Board } from '@models/board.model';
 import { Card } from '@models/card.model';
 import { CardsService } from '@services/cards.service';
 import { List } from '@models/list.model';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-board',
@@ -31,8 +33,14 @@ import { List } from '@models/list.model';
 })
 export class BoardComponent implements OnInit {
 
+  faClose = faClose
+
   board: Board | null = null;
   //showCardForm = false
+  inputCard = new FormControl<string>('', {
+    nonNullable: true,
+    validators: [Validators.required]
+  })
 
   // columns: Column[] = [
   //   {
@@ -166,5 +174,14 @@ export class BoardComponent implements OnInit {
         }
       });
     }
+  }
+
+  createCard() {
+    const title = this.inputCard.value;
+    console.log(title)
+  }
+
+  closeCardForm(list: List) {
+    list.showCardForm = false
   }
 }
