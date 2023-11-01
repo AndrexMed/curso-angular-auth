@@ -16,11 +16,11 @@
             {{ card.title }} - {{ card.position }}
           </div>
           <div class="mt-5">
-            <app-btn [color]="'light'" (click)="openFormCard(list)" *ngIf="!list.showCardForm">Add Board</app-btn>
+            <app-btn [color]="'light'" (click)="openFormCard(list)" *ngIf="!list.showCardForm">Add Card</app-btn>
             <div *ngIf="list.showCardForm">
               <textarea [formControl]="inputCard" class="w-full"></textarea>
               <div class="flex space-x-2 justify-start">
-                <app-btn [color]="'primary'" (click)="createCard()">Create</app-btn>
+                <app-btn [color]="'primary'" (click)="createCard(list)">Create</app-btn>
                 <app-btn [color]="'light'" (click)="closeCardForm(list)"><fa-icon [icon]="faClose"></fa-icon></app-btn>
               </div>
             </div>

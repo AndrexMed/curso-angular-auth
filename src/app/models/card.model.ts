@@ -23,6 +23,7 @@ export interface UpdateCardDTO {
 //     listId: string
 //     boardId: string
 // }
+
 export interface CreateCardDTO extends Omit<Card, 'id' | 'list'> {
     listId: string
     boardId: string

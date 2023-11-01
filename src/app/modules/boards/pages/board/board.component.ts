@@ -176,9 +176,22 @@ export class BoardComponent implements OnInit {
     }
   }
 
-  createCard() {
+  createCard(list: List) {
     const title = this.inputCard.value;
     console.log(title)
+
+    if (this.board) {
+      this.cardSvc.create({
+        title,
+        listId: list.id,
+        boardId: this.board.id,
+        position: this.boardSvc.getPositionNewCard(list.cards)
+      }).subscribe(card => {
+        list.cards.push(card)
+        this.inputCard.setValue("")
+        list.showCardForm = false;
+      })
+    }
   }
 
   closeCardForm(list: List) {

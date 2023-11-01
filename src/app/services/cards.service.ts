@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '@environments/environment';
 import { checkToken } from '@interceptors/token.interceptor';
-import { Card, UpdateCardDTO } from '@models/card.model';
+import { Card, CreateCardDTO, UpdateCardDTO } from '@models/card.model';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +19,9 @@ export class CardsService {
     })
   }
 
-  create() {
-
+  create(dto: CreateCardDTO) {
+    return this.http.post<Card>(`${this.apiUrl}/api/v1/cards`, dto, {
+      context: checkToken()
+    })
   }
 }
