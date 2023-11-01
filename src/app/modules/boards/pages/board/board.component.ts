@@ -8,14 +8,14 @@ import { Dialog } from '@angular/cdk/dialog';
 import { TodoDialogComponent } from '@boards/components/todo-dialog/todo-dialog.component';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
 
-import { ToDo } from '@models/todo.model';
 import { ActivatedRoute } from '@angular/router';
 import { BoardsService } from '@services/boards.service';
 import { Board } from '@models/board.model';
 import { Card } from '@models/card.model';
 import { CardsService } from '@services/cards.service';
 import { List } from '@models/list.model';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
+import { ListService } from '@services/list.service';
 
 @Component({
   selector: 'app-board',
@@ -49,48 +49,11 @@ export class BoardComponent implements OnInit {
 
   showListForm = false
 
-  // columns: Column[] = [
-  //   {
-  //     title: 'ToDo',
-  //     todos: [
-  //       {
-  //         id: '1',
-  //         title: 'Make dishes',
-  //       },
-  //       {
-  //         id: '2',
-  //         title: 'Buy a unicorn',
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     title: 'Doing',
-  //     todos: [
-  //       {
-  //         id: '3',
-  //         title: 'Watch Angular Path in Platzi',
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     title: 'Done',
-  //     todos: [
-  //       {
-  //         id: '4',
-  //         title: 'Play video games',
-  //       },
-  //     ],
-  //   },
-  // ];
-
-  todos: ToDo[] = [];
-  doing: ToDo[] = [];
-  done: ToDo[] = [];
-
   constructor(private dialog: Dialog,
     private route: ActivatedRoute,
     private boardSvc: BoardsService,
-    private cardSvc: CardsService) { }
+    private cardSvc: CardsService,
+    private listSvc: ListService) { }
 
   ngOnInit(): void {
     this.route.paramMap
@@ -132,6 +95,21 @@ export class BoardComponent implements OnInit {
   addList() {
     const title = this.inputList.value;
     console.log(title)
+    if (this.board) {
+      this.listSvc.create({
+        title,
+        boardId: this.board.id,
+        position: this.boardSvc.getPositionNewItem(this.board.lists)
+      })
+        .subscribe(list => {
+          this.board?.lists.push({
+            ...list,
+            cards: []
+          })
+          this.showListForm = true
+          this.inputList.setValue('')
+        })
+    }
   }
 
   openDialog(card: Card) {
@@ -190,7 +168,7 @@ export class BoardComponent implements OnInit {
         title,
         listId: list.id,
         boardId: this.board.id,
-        position: this.boardSvc.getPositionNewCard(list.cards)
+        position: this.boardSvc.getPositionNewItem(list.cards)
       }).subscribe(card => {
         list.cards.push(card)
         this.inputCard.setValue("")
