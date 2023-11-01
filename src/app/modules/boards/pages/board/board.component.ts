@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   CdkDragDrop,
   moveItemInArray,
@@ -16,7 +16,7 @@ import { CardsService } from '@services/cards.service';
 import { List } from '@models/list.model';
 import { FormControl, Validators } from '@angular/forms';
 import { ListService } from '@services/list.service';
-import { BACKGROUNDS } from '@models/color.model';
+import { BACKGROUNDS, Colors } from '@models/color.model';
 
 @Component({
   selector: 'app-board',
@@ -32,7 +32,7 @@ import { BACKGROUNDS } from '@models/color.model';
     `,
   ],
 })
-export class BoardComponent implements OnInit {
+export class BoardComponent implements OnInit, OnDestroy {
 
   faClose = faClose
 
@@ -65,7 +65,11 @@ export class BoardComponent implements OnInit {
         if (id) {
           this.getBoard(id)
         }
-      })
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.boardSvc.setBackgroundColor('sky')
   }
 
   drop(event: CdkDragDrop<Card[]>) {
@@ -131,7 +135,9 @@ export class BoardComponent implements OnInit {
     this.boardSvc.getBoard(id)
       .subscribe(board => {
         this.board = board
-      })
+        this.boardSvc.setBackgroundColor(this.board.backgroundColor)
+      });
+
   }
 
   private updateCard(card: Card, position: number, listId: number | string) {

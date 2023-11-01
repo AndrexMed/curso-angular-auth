@@ -6,7 +6,9 @@ import {
   faClose,
   faAngleDown
 } from '@fortawesome/free-solid-svg-icons';
+import { Colors, NAVBAR_BACKGROUNDS } from '@models/color.model';
 import { AuthService } from '@services/auth.service';
+import { BoardsService } from '@services/boards.service';
 import { TokenService } from '@services/token.service';
 
 @Component({
@@ -27,9 +29,18 @@ export class NavbarComponent implements OnInit {
   isOpenOverlayBoards = false;
   isOpenOverlayCreateBoard = false;
 
+  navBarBackgroundColor: Colors = 'sky'
+  navBarColors = NAVBAR_BACKGROUNDS
+
   constructor(private authSvc: AuthService,
     private router: Router,
-    private tokenSvc: TokenService) { }
+    private tokenSvc: TokenService,
+    private boardSvc: BoardsService) {
+
+    this.boardSvc.backgroundColor$.subscribe(color => {
+      this.navBarBackgroundColor = color
+    })
+  }
 
   ngOnInit(): void {
     // this.authSvc.profile()
@@ -54,5 +65,13 @@ export class NavbarComponent implements OnInit {
 
   close(event: boolean) {
     this.isOpenOverlayCreateBoard = event
+  }
+
+  get colors() {
+    const classes = this.navBarColors[this.navBarBackgroundColor]
+    if (classes) {
+      return classes ? classes : {}
+    }
+    return {}
   }
 }
