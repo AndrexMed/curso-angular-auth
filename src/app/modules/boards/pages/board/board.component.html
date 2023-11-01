@@ -15,6 +15,12 @@
             class="bg-white shadow p-2 rounded mt-2 border-b border-x-gray-300 cursor-pointer hover:bg-gray-400">
             {{ card.title }} - {{ card.position }}
           </div>
+          <div class="mt-5">
+            <app-btn [color]="'light'" (click)="openFormCard(list)" *ngIf="!list.showCardForm">Add Board</app-btn>
+            <div *ngIf="list.showCardForm">
+              showFrom
+            </div>
+          </div>
         </div>
       </div>
       <app-btn color="light" class="shrink-0" (click)="addColumn()">Add Column</app-btn>
