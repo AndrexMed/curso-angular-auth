@@ -6,12 +6,12 @@ import {
 } from '@angular/cdk/drag-drop';
 import { Dialog } from '@angular/cdk/dialog';
 import { TodoDialogComponent } from '@boards/components/todo-dialog/todo-dialog.component';
-import { faClose } from '@fortawesome/free-solid-svg-icons';
+import { faClose, faEdit } from '@fortawesome/free-solid-svg-icons';
 
 import { ActivatedRoute } from '@angular/router';
 import { BoardsService } from '@services/boards.service';
 import { Board } from '@models/board.model';
-import { Card } from '@models/card.model';
+import { Card, UpdateCardDTO } from '@models/card.model';
 import { CardsService } from '@services/cards.service';
 import { List } from '@models/list.model';
 import { FormControl, Validators } from '@angular/forms';
@@ -35,6 +35,7 @@ import { BACKGROUNDS, Colors } from '@models/color.model';
 export class BoardComponent implements OnInit, OnDestroy {
 
   faClose = faClose
+  faEdit = faEdit
 
   board: Board | null = null;
   //showCardForm = false
@@ -48,6 +49,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     validators: [Validators.required]
   });
 
+  showCardForm = false
   showListForm = false
   colorBackgrounds = BACKGROUNDS
 
@@ -118,7 +120,8 @@ export class BoardComponent implements OnInit, OnDestroy {
     }
   }
 
-  openDialog(card: Card) {
+  openDialog(event: Event, card: Card) {
+    event.stopPropagation()
     const dialogRef = this.dialog.open(TodoDialogComponent, {
       minWidth: '300px',
       maxWidth: '50%',
@@ -195,5 +198,11 @@ export class BoardComponent implements OnInit, OnDestroy {
       return classes ? classes : {}
     }
     return {}
+  }
+
+  editCard(event: Event, card: Card) {
+    event.stopPropagation();
+    card.isEditing = true
+    console.log("Aqui edito")
   }
 }

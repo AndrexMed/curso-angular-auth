@@ -6,6 +6,7 @@ export interface Card {
     description?: string,
     position: number,
     list: List
+    isEditing?: boolean
 }
 
 export interface UpdateCardDTO {
